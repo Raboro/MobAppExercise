@@ -19,9 +19,14 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import de.dhbw.mobapp.l2cpcontrols.ui.theme.L2CPControlsTheme
 
@@ -57,6 +62,9 @@ fun L2CPControlsApp(names: List<String> = listOf("DHBW", "Compose"), innerPaddin
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
+    var expandad by rememberSaveable {
+        mutableStateOf(false)
+    }
     Row(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(10.dp))
@@ -73,13 +81,24 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
                 color = MaterialTheme.colorScheme.onPrimary
             )
             Text(
-                text = "Hello $name!",
+                text = name,
+                fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimary,
             )
+            if (expandad) {
+                OutlinedButton(modifier = Modifier.padding(top = 5.dp), onClick = { /*TODO*/ }) {
+                    Text(
+                        text = stringResource(R.string.navigate),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
         }
-        OutlinedButton(onClick = { /*TODO*/ }) {
+        OutlinedButton(
+            modifier = Modifier.padding(top = 2.dp),
+            onClick = { expandad = !expandad }) {
             Text(
-                text = stringResource(R.string.show_more),
+                text = stringResource(if (expandad) R.string.show_less else R.string.show_more),
                 color = MaterialTheme.colorScheme.onPrimary
             )
         }

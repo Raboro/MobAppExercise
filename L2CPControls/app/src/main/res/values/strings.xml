@@ -2,4 +2,6 @@
     <string name="app_name">L2CPControls</string>
     <string name="hello">hello</string>
     <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
+    <string name="navigate">Navigate</string>
 </resources>
