@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,11 +28,24 @@ class MainActivity : ComponentActivity() {
         setContent {
             L2CPControlsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    L2CPControlsApp(innerPadding = innerPadding)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun L2CPControlsApp(names: List<String> = listOf("DHBW", "Compose"), innerPadding: PaddingValues) {
+    Column(
+        modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center
+    ) {
+        names.forEach {
+            Column(modifier = Modifier.padding(5.dp)) {
+                Greeting(name = it)
             }
         }
     }
