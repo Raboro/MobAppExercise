@@ -29,5 +29,8 @@ fun L2CPControlsApp() {
         composable(route = "mainView") {
             MainView(navController = navController)
         }
+        composable(route = "secondView") {
+            SecondView()
+        }
     }
 }
