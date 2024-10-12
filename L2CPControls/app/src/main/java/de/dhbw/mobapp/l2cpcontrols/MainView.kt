@@ -23,9 +23,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun MainView(names: List<String> = listOf("DHBW", "Compose")) {
+fun MainView(names: List<String> = listOf("DHBW", "Compose"), navController: NavController) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
