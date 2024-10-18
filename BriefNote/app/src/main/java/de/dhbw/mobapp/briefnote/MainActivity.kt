@@ -70,7 +70,7 @@ fun InputSection() {
             }
             Button(
                 modifier = buttonModifier,
-                onClick = {}) {
+                onClick = { viewModel.deleteAll() }) {
                 Text(text = "Alle Notizen löschen")
             }
         }

@@ -23,4 +23,8 @@ class MainViewModel : ViewModel() {
         repository.insert(Note(0, noteText)) // id 0 -> auto generated
         noteText = "";
     }
+
+    fun deleteAll() = viewModelScope.launch {
+        repository.deleteAll()
+    }
 }
