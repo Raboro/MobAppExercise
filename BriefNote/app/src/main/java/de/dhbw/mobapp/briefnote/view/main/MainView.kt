@@ -3,7 +3,6 @@ package de.dhbw.mobapp.briefnote.view.main
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,22 +21,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.dhbw.mobapp.briefnote.database.Note
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainView(viewModel: MainViewModel) {
+    val notes by viewModel.notes.collectAsState(initial = emptyList())
+
     Scaffold(
         topBar = { TopAppBar(title = { Text("BriefNoteCompose") }) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            InputSection(viewModel = viewModel)
-            NoteList(viewModel = viewModel)
+            InputSection(viewModel = viewModel, notes = notes)
+            NoteList(notes = notes, onDeleteNote = { viewModel.deleteNote(it) })
         }
     }
 }
 
 @Composable
-fun InputSection(viewModel: MainViewModel) {
+fun InputSection(viewModel: MainViewModel, notes: List<Note>) {
     val buttonModifier = Modifier.padding(top = 10.dp)
 
     Column(
@@ -54,8 +56,6 @@ fun InputSection(viewModel: MainViewModel) {
             onClick = { viewModel.insert() }) {
             Text(text = "Neue Notiz hinzufügen")
         }
-        val notes by viewModel.notes.collectAsState(initial = emptyList())
-
         if (notes.isNotEmpty()) {
             Button(
                 modifier = buttonModifier,
@@ -67,9 +67,7 @@ fun InputSection(viewModel: MainViewModel) {
 }
 
 @Composable
-fun NoteList(viewModel: MainViewModel) {
-    val notes by viewModel.notes.collectAsState(initial = emptyList())
-
+fun NoteList(notes: List<Note>, onDeleteNote: (Note) -> Unit) {
     LazyColumn {
         items(notes) { note ->
             Text(text = note.note,
@@ -79,7 +77,7 @@ fun NoteList(viewModel: MainViewModel) {
                     .padding(5.dp)
                     .clickable {
                         Log.i("BRIEFNOTE", "Auf Item ${note.note} wurde geclickt")
-                        viewModel.deleteNote(note)
+                        onDeleteNote(note)
                     }
                     .background(MaterialTheme.colorScheme.primary))
         }
