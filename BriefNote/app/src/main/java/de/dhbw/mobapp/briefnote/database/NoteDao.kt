@@ -1,6 +1,7 @@
 package de.dhbw.mobapp.briefnote.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
@@ -15,4 +16,7 @@ interface NoteDao {
 
     @Query("DELETE FROM note_table")
     suspend fun deleteAll()
+
+    @Delete
+    suspend fun deleteNote(note: Note)
 }

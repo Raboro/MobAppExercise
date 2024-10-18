@@ -31,4 +31,8 @@ class MainViewModel : ViewModel() {
     fun deleteAll() = viewModelScope.launch {
         repository.deleteAll()
     }
+
+    fun deleteNote(note: Note) = viewModelScope.launch {
+        repository.deleteNote(note)
+    }
 }

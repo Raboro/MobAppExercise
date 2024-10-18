@@ -70,13 +70,16 @@ fun NoteList(viewModel: MainViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(notes) { note ->
-            Text(text = note.note, modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp)
-                .clickable {
-                    Log.i("BRIEFNOTE", "Auf Item ${note.note} wurde geclickt")
-                }
-                .background(MaterialTheme.colorScheme.onPrimary))
+            Text(text = note.note,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp)
+                    .clickable {
+                        Log.i("BRIEFNOTE", "Auf Item ${note.note} wurde geclickt")
+                        viewModel.deleteNote(note)
+                    }
+                    .background(MaterialTheme.colorScheme.primary))
         }
     }
 }
