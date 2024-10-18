@@ -35,9 +35,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BriefNoteTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    InputSection(innerPadding = innerPadding)
-                }
+                InputSection()
             }
         }
     }
@@ -45,23 +43,18 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputSection(innerPadding: PaddingValues) {
+fun InputSection() {
     val viewModel = viewModel<MainViewModel>()
     viewModel.initialize(NoteDatabase.getInstance(LocalContext.current))
 
-    val buttonModifier = Modifier
-        .padding(top = 10.dp)
-        .clip(shape = RoundedCornerShape(25.dp))
-        .background(MaterialTheme.colorScheme.primary)
+    val buttonModifier = Modifier.padding(top = 10.dp)
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("BriefNoteCompose") }) },
-        modifier = Modifier
-            .padding(innerPadding)
-            .fillMaxSize(),
-    ) { padding ->
+        modifier = Modifier.fillMaxSize(),
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(padding),
+            modifier = Modifier.padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TextField(
