@@ -1,5 +1,6 @@
 package de.dhbw.mobapp.briefnote.database
 
+// in der Realität mit dependency injection und nicht im constructor
 class NoteRepository(private val noteDao: NoteDao) {
     val allNotes = noteDao.getAllNotesSortedByName()
 
