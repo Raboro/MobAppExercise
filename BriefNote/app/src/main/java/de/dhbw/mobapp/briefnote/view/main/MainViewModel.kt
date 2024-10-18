@@ -21,5 +21,6 @@ class MainViewModel : ViewModel() {
 
     fun insert() = viewModelScope.launch {
         repository.insert(Note(0, noteText)) // id 0 -> auto generated
+        noteText = "";
     }
 }

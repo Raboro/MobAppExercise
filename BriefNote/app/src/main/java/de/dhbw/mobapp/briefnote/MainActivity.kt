@@ -65,7 +65,7 @@ fun InputSection() {
                 })
             Button(
                 modifier = buttonModifier,
-                onClick = {}) {
+                onClick = { viewModel.insert() }) {
                 Text(text = "Neue Notiz hinzufügen")
             }
             Button(
