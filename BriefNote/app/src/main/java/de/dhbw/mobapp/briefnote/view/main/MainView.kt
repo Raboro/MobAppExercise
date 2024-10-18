@@ -32,34 +32,46 @@ fun MainView(viewModel: MainViewModel) {
         topBar = { TopAppBar(title = { Text("BriefNoteCompose") }) }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            InputSection(viewModel = viewModel, notes = notes)
-            NoteList(notes = notes, onDeleteNote = { viewModel.deleteNote(it) })
+            InputSection(
+                noteText = viewModel.noteText,
+                notes = notes,
+                updateNoteText = { viewModel.noteText = it },
+                onInertNote = viewModel::insert,
+                onDeleteAll = viewModel::deleteAll
+            )
+            NoteList(notes = notes, onDeleteNote = viewModel::deleteNote)
         }
     }
 }
 
 @Composable
-fun InputSection(viewModel: MainViewModel, notes: List<Note>) {
+fun InputSection(
+    noteText: String,
+    notes: List<Note>,
+    updateNoteText: (String) -> Unit,
+    onInertNote: () -> Unit,
+    onDeleteAll: () -> Unit
+) {
     val buttonModifier = Modifier.padding(top = 10.dp)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
-            value = viewModel.noteText,
+            value = noteText,
             modifier = Modifier.fillMaxWidth(),
-            onValueChange = {
-                viewModel.noteText = it
-            })
+            onValueChange = { updateNoteText(it) })
         Button(
             modifier = buttonModifier,
-            onClick = { viewModel.insert() }) {
+            onClick = onInertNote
+        ) {
             Text(text = "Neue Notiz hinzufügen")
         }
         if (notes.isNotEmpty()) {
             Button(
                 modifier = buttonModifier,
-                onClick = { viewModel.deleteAll() }) {
+                onClick = onDeleteAll
+            ) {
                 Text(text = "Alle Notizen löschen")
             }
         }
