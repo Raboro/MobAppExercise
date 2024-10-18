@@ -66,9 +66,7 @@ fun InputSection(viewModel: MainViewModel) {
 fun NoteList(viewModel: MainViewModel) {
     val notes by viewModel.notes.collectAsState(initial = emptyList())
 
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    LazyColumn {
         items(notes) { note ->
             Text(text = note.note,
                 color = MaterialTheme.colorScheme.onPrimary,
