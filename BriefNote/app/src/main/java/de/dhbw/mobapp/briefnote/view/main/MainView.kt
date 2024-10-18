@@ -1,7 +1,9 @@
 package de.dhbw.mobapp.briefnote.view.main
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -63,11 +66,17 @@ fun InputSection(viewModel: MainViewModel) {
 fun NoteList(viewModel: MainViewModel) {
     val notes by viewModel.notes.collectAsState(initial = emptyList())
 
-    LazyColumn {
+    LazyColumn(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         items(notes) { note ->
-            Text(text = note.note, modifier = Modifier.clickable {
-                Log.i("BRIEFNOTE", "Auf Item ${note.note} wurde geclickt")
-            })
+            Text(text = note.note, modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp)
+                .clickable {
+                    Log.i("BRIEFNOTE", "Auf Item ${note.note} wurde geclickt")
+                }
+                .background(MaterialTheme.colorScheme.onPrimary))
         }
     }
 }
