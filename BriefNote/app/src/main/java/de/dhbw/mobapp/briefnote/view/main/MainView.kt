@@ -54,10 +54,14 @@ fun InputSection(viewModel: MainViewModel) {
             onClick = { viewModel.insert() }) {
             Text(text = "Neue Notiz hinzufügen")
         }
-        Button(
-            modifier = buttonModifier,
-            onClick = { viewModel.deleteAll() }) {
-            Text(text = "Alle Notizen löschen")
+        val notes by viewModel.notes.collectAsState(initial = emptyList())
+
+        if (notes.isNotEmpty()) {
+            Button(
+                modifier = buttonModifier,
+                onClick = { viewModel.deleteAll() }) {
+                Text(text = "Alle Notizen löschen")
+            }
         }
     }
 }
