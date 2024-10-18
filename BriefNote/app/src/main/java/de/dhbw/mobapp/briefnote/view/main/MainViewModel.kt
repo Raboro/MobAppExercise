@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import de.dhbw.mobapp.briefnote.database.Note
 import de.dhbw.mobapp.briefnote.database.NoteDatabase
 import de.dhbw.mobapp.briefnote.database.NoteRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
@@ -15,8 +16,11 @@ class MainViewModel : ViewModel() {
 
     var noteText by mutableStateOf("")
 
+    lateinit var notes: Flow<List<Note>>
+
     fun initialize(database: NoteDatabase) {
         repository = NoteRepository(database.noteDao)
+        notes = repository.allNotes
     }
 
     fun insert() = viewModelScope.launch {
