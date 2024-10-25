@@ -17,7 +17,7 @@ class UserDetailViewModel : ViewModel() {
     var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
 
-    fun updateUser(userDto: UserDto, callback: (String) -> Unit) {
+    fun updateUser(userDto: UserDto) {
         viewModelScope.launch {
             errorMessage = ""
             loading = true
@@ -27,14 +27,13 @@ class UserDetailViewModel : ViewModel() {
                 navController.navigateUp()
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
-                callback(errorMessage)
             } finally {
                 loading = false
             }
         }
     }
 
-    fun deleteUser(userId: Int, callback: (String) -> Unit) {
+    fun deleteUser(userId: Int) {
         viewModelScope.launch {
             errorMessage = ""
             loading = true
@@ -44,7 +43,6 @@ class UserDetailViewModel : ViewModel() {
                 navController.navigateUp()
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
-                callback(errorMessage)
             } finally {
                 loading = false
             }
