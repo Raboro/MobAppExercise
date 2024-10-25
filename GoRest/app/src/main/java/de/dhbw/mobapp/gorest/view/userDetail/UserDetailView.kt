@@ -53,34 +53,47 @@ fun UserDetailView(userDto: UserDto) {
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Text(text = "ID: ${userDto.id}")
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = name,
-                onValueChange = { name = it })
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = email,
-                onValueChange = { email = it })
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                value = gender,
-                onValueChange = { gender = it })
+            UserDetailViewContent(userDto, name, email, gender)
+        }
+    }
+}
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Button(onClick = {}, modifier = Modifier.padding(bottom = 10.dp)) {
-                    Text(text = stringResource(R.string.save))
-                }
-                Button(onClick = {}) {
-                    Text(text = stringResource(R.string.delete))
-                }
-            }
+@Composable
+private fun UserDetailViewContent(
+    userDto: UserDto,
+    name: String,
+    email: String,
+    gender: String
+) {
+    var name1 = name
+    var email1 = email
+    var gender1 = gender
+    Text(text = "ID: ${userDto.id}")
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+        value = name1,
+        onValueChange = { name1 = it })
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+        value = email1,
+        onValueChange = { email1 = it })
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+        value = gender1,
+        onValueChange = { gender1 = it })
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(onClick = {}, modifier = Modifier.padding(bottom = 10.dp)) {
+            Text(text = stringResource(R.string.save))
+        }
+        Button(onClick = {}) {
+            Text(text = stringResource(R.string.delete))
         }
     }
 }
