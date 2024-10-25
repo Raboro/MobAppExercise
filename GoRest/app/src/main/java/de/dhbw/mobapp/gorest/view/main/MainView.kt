@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,16 +28,24 @@ fun MainView(navController: NavController, mainViewModel: MainViewModel) {
         Button(onClick = { navController.navigate("userDetailView") }) {
             Text(text = stringResource(R.string.new_user))
         }
-
-        if (mainViewModel.errorMessage.isEmpty()) {
-            LazyColumn {
-                itemsIndexed(items = mainViewModel.users) { index, item ->
-                    UserCell(userDto = item)
-                }
-            }
+        if (mainViewModel.loading) {
+            CircularProgressIndicator()
         } else {
-            // Color ganz schlecht, nur hier als Test
-            Text(text = mainViewModel.errorMessage, color = Color.Red, fontWeight = FontWeight.Bold)
+            MainList(navController = navController, mainViewModel = mainViewModel)
         }
+    }
+}
+
+@Composable
+fun MainList(navController: NavController, mainViewModel: MainViewModel) {
+    if (mainViewModel.errorMessage.isEmpty()) {
+        LazyColumn {
+            itemsIndexed(items = mainViewModel.users) { index, item ->
+                UserCell(userDto = item)
+            }
+        }
+    } else {
+        // Color ganz schlecht, nur hier als Test
+        Text(text = mainViewModel.errorMessage, color = Color.Red, fontWeight = FontWeight.Bold)
     }
 }

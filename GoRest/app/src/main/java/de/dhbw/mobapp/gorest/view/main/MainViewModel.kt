@@ -14,15 +14,20 @@ class MainViewModel : ViewModel() {
 
     var users: List<UserDto> by mutableStateOf(listOf())
     var errorMessage: String by mutableStateOf("")
+    var loading: Boolean by mutableStateOf(false)
 
     fun getAllUsers() {
         viewModelScope.launch {
             errorMessage = ""
+            loading = true
+
             try {
                 val allUsers = userService.getAllUsers()
                 users = allUsers
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
+            } finally {
+                loading = false
             }
         }
     }
