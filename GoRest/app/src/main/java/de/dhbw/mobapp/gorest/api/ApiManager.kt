@@ -20,7 +20,7 @@ import kotlinx.serialization.json.Json
 import kotlin.coroutines.cancellation.CancellationException
 
 class ApiManager {
-    private val apiKey = "02f11ad5823f8a9ab7fda45866e4c3c9fc0dec438ab2de30103a18b361c75297";
+    private val apiKey = "02f11ad5823f8a9ab7fda45866e4c3c9fc0dec438ab2de30103a18b361c75297"
 
     var jsonHttpClient = HttpClient {
         expectSuccess = true
@@ -34,7 +34,7 @@ class ApiManager {
         defaultRequest {
             url.host = "gorest.co.in"
             url.protocol = URLProtocol.HTTPS
-            url.encodedPath = "/public/v2" + url.encodedPath
+            url.encodedPath = "/public/v2/" + url.encodedPath
             contentType(ContentType.Application.Json)
 
             header(HttpHeaders.Authorization, "Bearer $apiKey")

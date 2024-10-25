@@ -11,11 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import de.dhbw.mobapp.gorest.ui.theme.GoRestTheme
 import de.dhbw.mobapp.gorest.view.main.MainView
+import de.dhbw.mobapp.gorest.view.main.MainViewModel
 import de.dhbw.mobapp.gorest.view.userDetail.UserDetailView
 
 class MainActivity : ComponentActivity() {
@@ -35,9 +37,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GoRestApp(modifier: Modifier) {
     val navController = rememberNavController()
+    val mainViewModel = viewModel<MainViewModel>()
+
+
     NavHost(navController = navController, startDestination = "mainView", modifier = modifier) {
         composable("mainView") {
-            MainView(navController = navController)
+            MainView(navController = navController, mainViewModel)
         }
         composable("userDetailView") {
             UserDetailView()
