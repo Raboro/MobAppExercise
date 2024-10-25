@@ -45,7 +45,7 @@ fun GoRestApp(modifier: Modifier) {
             MainView(navController = navController, mainViewModel)
         }
         composable("userDetailView") {
-            UserDetailView()
+            //UserDetailView()
         }
     }
 }
