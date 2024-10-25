@@ -12,13 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import de.dhbw.mobapp.gorest.ui.theme.GoRestTheme
 import de.dhbw.mobapp.gorest.view.main.MainView
 import de.dhbw.mobapp.gorest.view.main.MainViewModel
 import de.dhbw.mobapp.gorest.view.userDetail.UserDetailView
+import de.dhbw.mobapp.gorest.view.userDetail.UserDetailViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,14 +41,20 @@ class MainActivity : ComponentActivity() {
 fun GoRestApp(modifier: Modifier) {
     val navController = rememberNavController()
     val mainViewModel = viewModel<MainViewModel>()
-
+    val userDetailViewModel = viewModel<UserDetailViewModel>()
+    userDetailViewModel.navController = navController
 
     NavHost(navController = navController, startDestination = "mainView", modifier = modifier) {
         composable("mainView") {
             MainView(navController = navController, mainViewModel)
         }
-        composable("userDetailView") {
-            //UserDetailView()
+        composable(
+            "userDetailView/{index}",
+            arguments = listOf(navArgument("index") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val index = backStackEntry.arguments?.getInt("index") ?: return@composable
+            val user = mainViewModel.users[index]
+            UserDetailView(user, userDetailViewModel)
         }
     }
 }

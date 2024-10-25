@@ -1,5 +1,7 @@
 package de.dhbw.mobapp.gorest.view.main
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,9 +33,11 @@ fun MainView(navController: NavController, mainViewModel: MainViewModel) {
             Text(text = stringResource(R.string.new_user))
         }
 
-        Column(modifier = Modifier
-            .padding(5.dp)
-            .fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .padding(5.dp)
+                .fillMaxWidth()
+        ) {
             if (mainViewModel.loading) {
                 CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally))
             } else {
@@ -48,7 +52,11 @@ fun MainList(navController: NavController, mainViewModel: MainViewModel) {
     if (mainViewModel.errorMessage.isEmpty()) {
         LazyColumn {
             itemsIndexed(items = mainViewModel.users) { index, item ->
-                UserCell(userDto = item)
+                Box(modifier = Modifier.clickable {
+                    navController.navigate("userDetailView/$index")
+                }) {
+                    UserCell(userDto = item)
+                }
             }
         }
     } else {

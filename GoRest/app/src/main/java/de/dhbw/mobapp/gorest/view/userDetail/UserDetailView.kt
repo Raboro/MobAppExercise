@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -18,28 +19,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.dhbw.mobapp.gorest.R
 import de.dhbw.mobapp.gorest.dto.UserDto
+import de.dhbw.mobapp.gorest.dto.UserViewDto
 import de.dhbw.mobapp.gorest.ui.theme.GoRestTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserDetailView(userDto: UserDto) {
-    var name by remember {
-        mutableStateOf("")
+fun UserDetailView(userDto: UserDto, userDetailViewModel: UserDetailViewModel) {
+    val userViewDto by remember {
+        mutableStateOf(UserViewDto.from(userDto))
     }
-    var email by remember {
-        mutableStateOf("")
-    }
-    var gender by remember {
-        mutableStateOf("")
-    }
-
 
     Scaffold(
         topBar = {
@@ -53,47 +48,70 @@ fun UserDetailView(userDto: UserDto) {
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            UserDetailViewContent(userDto, name, email, gender)
+            if (userDetailViewModel.loading) {
+                CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally))
+            } else {
+                UserDetailViewContent(userViewDto, userDetailViewModel)
+            }
         }
     }
 }
 
 @Composable
 private fun UserDetailViewContent(
-    userDto: UserDto,
-    name: String,
-    email: String,
-    gender: String
+    userViewDto: UserViewDto,
+    userDetailViewModel: UserDetailViewModel
 ) {
-    var name1 = name
-    var email1 = email
-    var gender1 = gender
-    Text(text = "ID: ${userDto.id}")
+    var error: String by remember {
+        mutableStateOf("")
+    }
+
+    Text(text = "ID: ${userViewDto.id}")
     TextField(
         modifier = Modifier
             .fillMaxWidth(),
-        value = name1,
-        onValueChange = { name1 = it })
+        value = userViewDto.name,
+        onValueChange = { userViewDto.name = it })
     TextField(
         modifier = Modifier
             .fillMaxWidth(),
-        value = email1,
-        onValueChange = { email1 = it })
+        value = userViewDto.email,
+        onValueChange = { userViewDto.email = it })
     TextField(
         modifier = Modifier
             .fillMaxWidth(),
-        value = gender1,
-        onValueChange = { gender1 = it })
+        value = userViewDto.gender,
+        onValueChange = { userViewDto.gender = it })
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = CenterHorizontally
     ) {
-        Button(onClick = {}, modifier = Modifier.padding(bottom = 10.dp)) {
-            Text(text = stringResource(R.string.save))
+        if (userViewDto.name.isNotEmpty()
+            && userViewDto.gender.isNotEmpty()
+            && userViewDto.email.isNotEmpty()
+            && userViewDto.status.isNotEmpty()
+        ) {
+            Button(
+                onClick = {
+                    userDetailViewModel.updateUser(userViewDto.toUserDto()) { errorMessage ->
+                        error = errorMessage
+                    }
+                },
+                modifier = Modifier.padding(bottom = 10.dp)
+            ) {
+                Text(text = stringResource(R.string.save))
+            }
         }
-        Button(onClick = {}) {
+        Button(onClick = {
+            userDetailViewModel.deleteUser(userViewDto.id) { errorMessage ->
+                error = errorMessage
+            }
+        }) {
             Text(text = stringResource(R.string.delete))
+        }
+        if (error.isNotEmpty()) {
+            Text(text = "Error: $error")
         }
     }
 }
@@ -106,7 +124,10 @@ fun UserDetailPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            UserDetailView(userDto = UserDto(1, "Kek", "kek@kek.com", "male", "active"))
+            UserDetailView(
+                userDto = UserDto(1, "Kek", "kek@kek.com", "male", "active"),
+                userDetailViewModel = UserDetailViewModel()
+            )
         }
     }
 }
