@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.client.serialization)
