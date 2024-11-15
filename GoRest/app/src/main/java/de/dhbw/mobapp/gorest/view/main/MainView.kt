@@ -18,18 +18,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import de.dhbw.mobapp.gorest.R
 import de.dhbw.mobapp.gorest.view.main.cell.UserCell
 
 @Composable
-fun MainView(navController: NavController, mainViewModel: MainViewModel) {
+fun MainView(mainViewModel: MainViewModel) {
     LaunchedEffect(Unit) { // mit Unit, einmalig ausgeführt beim rendern -> init laden, da sich unit nie ändert
         mainViewModel.getAllUsers()
     }
 
     Column(modifier = Modifier.padding(5.dp)) {
-        Button(onClick = { navController.navigate("userDetailView/-1") }) {
+        Button(onClick = { mainViewModel.navigateToDetail(-1) }) {
             Text(text = stringResource(R.string.new_user))
         }
 
@@ -41,19 +40,19 @@ fun MainView(navController: NavController, mainViewModel: MainViewModel) {
             if (mainViewModel.loading) {
                 CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally))
             } else {
-                MainList(navController = navController, mainViewModel = mainViewModel)
+                MainList(mainViewModel = mainViewModel)
             }
         }
     }
 }
 
 @Composable
-fun MainList(navController: NavController, mainViewModel: MainViewModel) {
+fun MainList(mainViewModel: MainViewModel) {
     if (mainViewModel.errorMessage.isEmpty()) {
         LazyColumn {
             itemsIndexed(items = mainViewModel.users) { index, item ->
                 Box(modifier = Modifier.clickable {
-                    navController.navigate("userDetailView/$index")
+                    mainViewModel.navigateToDetail(index)
                 }) {
                     UserCell(userDto = item, userImage = mainViewModel.userImage)
                 }

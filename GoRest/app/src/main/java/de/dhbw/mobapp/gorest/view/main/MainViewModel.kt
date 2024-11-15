@@ -1,6 +1,5 @@
 package de.dhbw.mobapp.gorest.view.main
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,7 +12,7 @@ import de.dhbw.mobapp.gorest.dto.UserDto
 import de.dhbw.mobapp.gorest.service.UserService
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val navToDetail: (id: Int) -> Unit) : ViewModel() {
     private val userService = UserService()
 
     var users: MutableList<UserDto> by mutableStateOf(mutableListOf())
@@ -30,7 +29,7 @@ class MainViewModel : ViewModel() {
             try {
                 val allUsers = userService.getAllUsers()
                 val loadUserImage = userService.getUserImage()
-                var bitmap = BitmapFactory.decodeByteArray(loadUserImage, 0, loadUserImage.size)
+                val bitmap = BitmapFactory.decodeByteArray(loadUserImage, 0, loadUserImage.size)
                 userImage = bitmap.asImageBitmap()
                 users = allUsers.toMutableList()
             } catch (e: Exception) {
@@ -39,5 +38,9 @@ class MainViewModel : ViewModel() {
                 loading = false
             }
         }
+    }
+
+    fun navigateToDetail(id: Int) {
+        this.navToDetail(id)
     }
 }

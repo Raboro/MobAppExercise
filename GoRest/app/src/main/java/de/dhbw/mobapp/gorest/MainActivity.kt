@@ -7,10 +7,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -42,20 +41,23 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GoRestApp(modifier: Modifier) {
     val navController = rememberNavController()
-    val mainViewModel = viewModel<MainViewModel>()
+    val navigateToDetail: (Int) -> Unit = { navController.navigate("userDetailView/$it") }
+    val mainViewModel = remember {
+        MainViewModel(navToDetail = navigateToDetail)
+    }
     val userDetailViewModel = viewModel<UserDetailViewModel>()
     userDetailViewModel.navController = navController
 
     NavHost(navController = navController, startDestination = "mainView", modifier = modifier) {
         composable("mainView") {
-            MainView(navController = navController, mainViewModel)
+            MainView(mainViewModel)
         }
         composable(
             "userDetailView/{index}",
             arguments = listOf(navArgument("index") { type = NavType.IntType })
         ) { backStackEntry ->
             var index = backStackEntry.arguments?.getInt("index") ?: return@composable
-            if (index == -1 ) {
+            if (index == -1) {
                 mainViewModel.users.add(UserDto(-1, "", "", "", "active"))
                 index = mainViewModel.users.lastIndex
             }
