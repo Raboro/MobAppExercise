@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import de.dhbw.mobapp.gorest.dto.UserDto
+import de.dhbw.mobapp.gorest.dto.UserViewDto
 import de.dhbw.mobapp.gorest.service.UserService
 import kotlinx.coroutines.launch
 
@@ -16,6 +17,7 @@ class UserDetailViewModel : ViewModel() {
 
     var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
+    var userViewDto: UserViewDto by mutableStateOf(UserViewDto(-1, "", "", "", "active"))
 
     fun updateUser(userDto: UserDto) {
         viewModelScope.launch {

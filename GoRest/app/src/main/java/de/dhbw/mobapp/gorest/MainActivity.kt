@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import de.dhbw.mobapp.gorest.dto.UserDto
+import de.dhbw.mobapp.gorest.dto.UserViewDto
 import de.dhbw.mobapp.gorest.ui.theme.GoRestTheme
 import de.dhbw.mobapp.gorest.view.main.MainView
 import de.dhbw.mobapp.gorest.view.main.MainViewModel
@@ -59,7 +60,8 @@ fun GoRestApp(modifier: Modifier) {
                 index = mainViewModel.users.lastIndex
             }
             val user = mainViewModel.users[index]
-            UserDetailView(user, userDetailViewModel)
+            userDetailViewModel.userViewDto = UserViewDto.from(user)
+            UserDetailView(userDetailViewModel)
         }
     }
 }

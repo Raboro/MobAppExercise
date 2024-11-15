@@ -8,34 +8,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.dhbw.mobapp.gorest.R
-import de.dhbw.mobapp.gorest.dto.UserDto
-import de.dhbw.mobapp.gorest.dto.UserViewDto
-import de.dhbw.mobapp.gorest.ui.theme.GoRestTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserDetailView(userDto: UserDto, userDetailViewModel: UserDetailViewModel) {
-    val userViewDto by remember {
-        mutableStateOf(UserViewDto.from(userDto))
-    }
-
+fun UserDetailView(userDetailViewModel: UserDetailViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(text = stringResource(R.string.edit_user)) })
@@ -51,7 +38,7 @@ fun UserDetailView(userDto: UserDto, userDetailViewModel: UserDetailViewModel) {
             if (userDetailViewModel.loading) {
                 CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally))
             } else {
-                UserDetailViewContent(userViewDto, userDetailViewModel)
+                UserDetailViewContent(userDetailViewModel)
             }
         }
     }
@@ -59,46 +46,45 @@ fun UserDetailView(userDto: UserDto, userDetailViewModel: UserDetailViewModel) {
 
 @Composable
 private fun UserDetailViewContent(
-    userViewDto: UserViewDto,
     userDetailViewModel: UserDetailViewModel
 ) {
-    if (userViewDto.id != -1) {
-        Text(text = "ID: ${userViewDto.id}")
+    if (userDetailViewModel.userViewDto.id != -1) {
+        Text(text = "ID: ${userDetailViewModel.userViewDto.id}")
     }
     TextField(
         placeholder = { Text(text = "Name eingeben") },
         modifier = Modifier
             .fillMaxWidth(),
-        value = userViewDto.name,
-        onValueChange = { userViewDto.name = it })
+        value = userDetailViewModel.userViewDto.name,
+        onValueChange = { userDetailViewModel.userViewDto.name = it })
     TextField(
         placeholder = { Text(text = "Email eingeben") },
         modifier = Modifier
             .fillMaxWidth(),
-        value = userViewDto.email,
-        onValueChange = { userViewDto.email = it })
+        value = userDetailViewModel.userViewDto.email,
+        onValueChange = { userDetailViewModel.userViewDto.email = it })
     TextField(
         placeholder = { Text(text = "Gender eingeben") },
         modifier = Modifier
             .fillMaxWidth(),
-        value = userViewDto.gender,
-        onValueChange = { userViewDto.gender = it })
+        value = userDetailViewModel.userViewDto.gender,
+        onValueChange = { userDetailViewModel.userViewDto.gender = it })
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = CenterHorizontally
     ) {
-        if (userViewDto.name.isNotEmpty()
-            && userViewDto.gender.isNotEmpty()
-            && userViewDto.email.isNotEmpty()
-            && userViewDto.status.isNotEmpty()
+        if (userDetailViewModel.userViewDto.name.isNotEmpty()
+            && userDetailViewModel.userViewDto.gender.isNotEmpty()
+            && userDetailViewModel.userViewDto.email.isNotEmpty()
+            && userDetailViewModel.userViewDto.status.isNotEmpty()
         ) {
             Button(
                 onClick = {
-                    if (userViewDto.id == -1) {
-                        userDetailViewModel.addUser(userViewDto.toUserDto())
+                    if (userDetailViewModel.userViewDto.id == -1) {
+                        userDetailViewModel.addUser(userDetailViewModel.userViewDto.toUserDto())
                     } else {
-                        userDetailViewModel.updateUser(userViewDto.toUserDto())
+                        userDetailViewModel.updateUser(userDetailViewModel.userViewDto.toUserDto())
                     }
                 },
                 modifier = Modifier.padding(bottom = 10.dp)
@@ -106,9 +92,9 @@ private fun UserDetailViewContent(
                 Text(text = stringResource(R.string.save))
             }
         }
-        if (userViewDto.id != -1) {
+        if (userDetailViewModel.userViewDto.id != -1) {
             Button(onClick = {
-                userDetailViewModel.deleteUser(userViewDto.id)
+                userDetailViewModel.deleteUser(userDetailViewModel.userViewDto.id)
             }) {
                 Text(text = stringResource(R.string.delete))
             }
@@ -118,20 +104,3 @@ private fun UserDetailViewContent(
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun UserDetailPreview() {
-    GoRestTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            UserDetailView(
-                userDto = UserDto(1, "Kek", "kek@kek.com", "male", "active"),
-                userDetailViewModel = UserDetailViewModel()
-            )
-        }
-    }
-}
-
