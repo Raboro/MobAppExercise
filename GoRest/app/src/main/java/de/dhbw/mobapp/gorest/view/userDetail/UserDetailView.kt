@@ -66,16 +66,19 @@ private fun UserDetailViewContent(
         Text(text = "ID: ${userViewDto.id}")
     }
     TextField(
+        placeholder = { Text(text = "Name eingeben") },
         modifier = Modifier
             .fillMaxWidth(),
         value = userViewDto.name,
         onValueChange = { userViewDto.name = it })
     TextField(
+        placeholder = { Text(text = "Email eingeben") },
         modifier = Modifier
             .fillMaxWidth(),
         value = userViewDto.email,
         onValueChange = { userViewDto.email = it })
     TextField(
+        placeholder = { Text(text = "Gender eingeben") },
         modifier = Modifier
             .fillMaxWidth(),
         value = userViewDto.gender,
@@ -92,7 +95,11 @@ private fun UserDetailViewContent(
         ) {
             Button(
                 onClick = {
-                    userDetailViewModel.updateUser(userViewDto.toUserDto())
+                    if (userViewDto.id == -1) {
+                        userDetailViewModel.addUser(userViewDto.toUserDto())
+                    } else {
+                        userDetailViewModel.updateUser(userViewDto.toUserDto())
+                    }
                 },
                 modifier = Modifier.padding(bottom = 10.dp)
             ) {

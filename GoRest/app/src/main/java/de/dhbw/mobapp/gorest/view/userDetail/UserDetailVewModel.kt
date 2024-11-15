@@ -33,6 +33,22 @@ class UserDetailViewModel : ViewModel() {
         }
     }
 
+    fun addUser(userDto: UserDto) {
+        viewModelScope.launch {
+            errorMessage = ""
+            loading = true
+
+            try {
+                userService.addUser(userDto)
+                navController.navigateUp()
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
+            } finally {
+                loading = false
+            }
+        }
+    }
+
     fun deleteUser(userId: Int) {
         viewModelScope.launch {
             errorMessage = ""
