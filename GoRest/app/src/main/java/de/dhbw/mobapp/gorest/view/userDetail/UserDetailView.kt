@@ -1,5 +1,6 @@
 package de.dhbw.mobapp.gorest.view.userDetail
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -74,11 +76,7 @@ private fun UserDetailViewContent(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = CenterHorizontally
     ) {
-        if (userDetailViewModel.userViewDto.name.isNotEmpty()
-            && userDetailViewModel.userViewDto.gender.isNotEmpty()
-            && userDetailViewModel.userViewDto.email.isNotEmpty()
-            && userDetailViewModel.userViewDto.status.isNotEmpty()
-        ) {
+        AnimatedVisibility(visible = userDetailViewModel.userCanBeInitialized()) {
             Button(
                 onClick = {
                     if (userDetailViewModel.userViewDto.id == -1) {
@@ -92,14 +90,14 @@ private fun UserDetailViewContent(
                 Text(text = stringResource(R.string.save))
             }
         }
-        if (userDetailViewModel.userViewDto.id != -1) {
+        AnimatedVisibility(visible = userDetailViewModel.userViewDto.id != -1) {
             Button(onClick = {
                 userDetailViewModel.deleteUser(userDetailViewModel.userViewDto.id)
             }) {
                 Text(text = stringResource(R.string.delete))
             }
         }
-        if (userDetailViewModel.errorMessage.isNotEmpty()) {
+        AnimatedVisibility(visible = userDetailViewModel.errorMessage.isNotEmpty()) {
             Text(text = userDetailViewModel.errorMessage, color = Color.Red)
         }
     }

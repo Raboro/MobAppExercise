@@ -67,4 +67,11 @@ class UserDetailViewModel : ViewModel() {
         }
     }
 
+    fun userCanBeInitialized(): Boolean {
+        return userViewDto.name.isNotEmpty()
+                && userViewDto.gender.isNotEmpty()
+                && userViewDto.email.isNotEmpty()
+                && userViewDto.status.isNotEmpty()
+    }
+
 }
