@@ -19,13 +19,13 @@ class UserDetailViewModel : ViewModel() {
     var loading: Boolean by mutableStateOf(false)
     var userViewDto: UserViewDto by mutableStateOf(UserViewDto(-1, "", "", "", "active"))
 
-    fun updateUser(userDto: UserDto) {
+    fun updateUser() {
         viewModelScope.launch {
             errorMessage = ""
             loading = true
 
             try {
-                userService.updateUser(userDto)
+                userService.updateUser(userViewDto.toUserDto())
                 navController.navigateUp()
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
@@ -35,13 +35,13 @@ class UserDetailViewModel : ViewModel() {
         }
     }
 
-    fun addUser(userDto: UserDto) {
+    fun addUser() {
         viewModelScope.launch {
             errorMessage = ""
             loading = true
 
             try {
-                userService.addUser(userDto)
+                userService.addUser(userViewDto.toUserDto())
                 navController.navigateUp()
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
@@ -51,13 +51,13 @@ class UserDetailViewModel : ViewModel() {
         }
     }
 
-    fun deleteUser(userId: Int) {
+    fun deleteUser() {
         viewModelScope.launch {
             errorMessage = ""
             loading = true
 
             try {
-                userService.deleteUser(userId)
+                userService.deleteUser(userViewDto.id)
                 navController.navigateUp()
             } catch (e: Exception) {
                 errorMessage = e.message.toString()

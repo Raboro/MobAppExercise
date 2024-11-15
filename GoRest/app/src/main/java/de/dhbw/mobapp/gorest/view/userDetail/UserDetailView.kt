@@ -39,7 +39,12 @@ fun UserDetailView(userDetailViewModel: UserDetailViewModel) {
             if (userDetailViewModel.loading) {
                 CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally))
             } else {
-                UserDetailViewContent(userDetailViewModel)
+                UserDetailViewContent(
+                    userDetailViewModel,
+                    userDetailViewModel::deleteUser,
+                    userDetailViewModel::addUser,
+                    userDetailViewModel::updateUser,
+                )
             }
         }
     }
@@ -47,7 +52,10 @@ fun UserDetailView(userDetailViewModel: UserDetailViewModel) {
 
 @Composable
 private fun UserDetailViewContent(
-    userDetailViewModel: UserDetailViewModel
+    userDetailViewModel: UserDetailViewModel,
+    deleteUser: () -> Unit,
+    addUser: () -> Unit,
+    updateUser: () -> Unit,
 ) {
     if (userDetailViewModel.hasId()) {
         Text(text = "ID: ${userDetailViewModel.userViewDto.id}")
@@ -79,9 +87,9 @@ private fun UserDetailViewContent(
             Button(
                 onClick = {
                     if (!userDetailViewModel.hasId()) {
-                        userDetailViewModel.addUser(userDetailViewModel.userViewDto.toUserDto())
+                        addUser()
                     } else {
-                        userDetailViewModel.updateUser(userDetailViewModel.userViewDto.toUserDto())
+                        updateUser()
                     }
                 },
                 modifier = Modifier.padding(bottom = 10.dp)
@@ -90,9 +98,7 @@ private fun UserDetailViewContent(
             }
         }
         AnimatedVisibility(visible = userDetailViewModel.hasId()) {
-            Button(onClick = {
-                userDetailViewModel.deleteUser(userDetailViewModel.userViewDto.id)
-            }) {
+            Button(onClick = deleteUser) {
                 Text(text = stringResource(R.string.delete))
             }
         }
