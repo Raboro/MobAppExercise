@@ -55,7 +55,7 @@ fun MainList(navController: NavController, mainViewModel: MainViewModel) {
                 Box(modifier = Modifier.clickable {
                     navController.navigate("userDetailView/$index")
                 }) {
-                    UserCell(userDto = item)
+                    UserCell(userDto = item, userImage = mainViewModel.userImage)
                 }
             }
         }

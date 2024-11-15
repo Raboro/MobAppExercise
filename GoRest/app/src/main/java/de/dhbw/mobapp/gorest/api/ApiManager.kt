@@ -45,6 +45,12 @@ class ApiManager {
         }
     }
 
+    var imageHttpClient = HttpClient {
+        HttpResponseValidator {
+            getCustomResponseValidator(this)
+        }
+    }
+
     private fun getCustomResponseValidator(responseValidator: HttpCallValidator.Config): HttpCallValidator.Config {
         responseValidator.handleResponseExceptionWithRequest { exception, _ ->
             var exceptionResponseText = exception.message ?: "Unknown Error occurred. Please contact your administrator"
