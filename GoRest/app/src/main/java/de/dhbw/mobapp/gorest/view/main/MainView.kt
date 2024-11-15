@@ -29,7 +29,7 @@ fun MainView(navController: NavController, mainViewModel: MainViewModel) {
     }
 
     Column(modifier = Modifier.padding(5.dp)) {
-        Button(onClick = { navController.navigate("userDetailView") }) {
+        Button(onClick = { navController.navigate("userDetailView/-1") }) {
             Text(text = stringResource(R.string.new_user))
         }
 

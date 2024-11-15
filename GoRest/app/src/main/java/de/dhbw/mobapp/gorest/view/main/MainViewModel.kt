@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class MainViewModel : ViewModel() {
     private val userService = UserService()
 
-    var users: List<UserDto> by mutableStateOf(listOf())
+    var users: MutableList<UserDto> by mutableStateOf(mutableListOf())
     var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
 
@@ -23,7 +23,7 @@ class MainViewModel : ViewModel() {
 
             try {
                 val allUsers = userService.getAllUsers()
-                users = allUsers
+                users = allUsers.toMutableList()
             } catch (e: Exception) {
                 errorMessage = e.message.toString()
             } finally {

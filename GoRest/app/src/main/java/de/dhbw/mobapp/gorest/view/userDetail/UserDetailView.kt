@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -63,7 +62,9 @@ private fun UserDetailViewContent(
     userViewDto: UserViewDto,
     userDetailViewModel: UserDetailViewModel
 ) {
-    Text(text = "ID: ${userViewDto.id}")
+    if (userViewDto.id != -1) {
+        Text(text = "ID: ${userViewDto.id}")
+    }
     TextField(
         modifier = Modifier
             .fillMaxWidth(),
@@ -98,10 +99,12 @@ private fun UserDetailViewContent(
                 Text(text = stringResource(R.string.save))
             }
         }
-        Button(onClick = {
-            userDetailViewModel.deleteUser(userViewDto.id)
-        }) {
-            Text(text = stringResource(R.string.delete))
+        if (userViewDto.id != -1) {
+            Button(onClick = {
+                userDetailViewModel.deleteUser(userViewDto.id)
+            }) {
+                Text(text = stringResource(R.string.delete))
+            }
         }
         if (userDetailViewModel.errorMessage.isNotEmpty()) {
             Text(text = userDetailViewModel.errorMessage, color = Color.Red)

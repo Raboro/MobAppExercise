@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import de.dhbw.mobapp.gorest.dto.UserDto
 import de.dhbw.mobapp.gorest.ui.theme.GoRestTheme
 import de.dhbw.mobapp.gorest.view.main.MainView
 import de.dhbw.mobapp.gorest.view.main.MainViewModel
@@ -52,7 +53,11 @@ fun GoRestApp(modifier: Modifier) {
             "userDetailView/{index}",
             arguments = listOf(navArgument("index") { type = NavType.IntType })
         ) { backStackEntry ->
-            val index = backStackEntry.arguments?.getInt("index") ?: return@composable
+            var index = backStackEntry.arguments?.getInt("index") ?: return@composable
+            if (index == -1 ) {
+                mainViewModel.users.add(UserDto(-1, "", "", "", "active"))
+                index = mainViewModel.users.lastIndex
+            }
             val user = mainViewModel.users[index]
             UserDetailView(user, userDetailViewModel)
         }
