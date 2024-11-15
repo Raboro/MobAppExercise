@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -50,7 +49,7 @@ fun UserDetailView(userDetailViewModel: UserDetailViewModel) {
 private fun UserDetailViewContent(
     userDetailViewModel: UserDetailViewModel
 ) {
-    if (userDetailViewModel.userViewDto.id != -1) {
+    if (userDetailViewModel.hasId()) {
         Text(text = "ID: ${userDetailViewModel.userViewDto.id}")
     }
     TextField(
@@ -79,7 +78,7 @@ private fun UserDetailViewContent(
         AnimatedVisibility(visible = userDetailViewModel.userCanBeInitialized()) {
             Button(
                 onClick = {
-                    if (userDetailViewModel.userViewDto.id == -1) {
+                    if (!userDetailViewModel.hasId()) {
                         userDetailViewModel.addUser(userDetailViewModel.userViewDto.toUserDto())
                     } else {
                         userDetailViewModel.updateUser(userDetailViewModel.userViewDto.toUserDto())
@@ -90,7 +89,7 @@ private fun UserDetailViewContent(
                 Text(text = stringResource(R.string.save))
             }
         }
-        AnimatedVisibility(visible = userDetailViewModel.userViewDto.id != -1) {
+        AnimatedVisibility(visible = userDetailViewModel.hasId()) {
             Button(onClick = {
                 userDetailViewModel.deleteUser(userDetailViewModel.userViewDto.id)
             }) {

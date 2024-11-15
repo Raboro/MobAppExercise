@@ -74,4 +74,8 @@ class UserDetailViewModel : ViewModel() {
                 && userViewDto.status.isNotEmpty()
     }
 
+    fun hasId(): Boolean {
+        return userViewDto.id != -1
+    }
+
 }
