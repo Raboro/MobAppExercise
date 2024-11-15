@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.dhbw.mobapp.gorest.R
+import de.dhbw.mobapp.gorest.dto.UserViewDto
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,10 +41,13 @@ fun UserDetailView(userDetailViewModel: UserDetailViewModel) {
                 CircularProgressIndicator(modifier = Modifier.align(CenterHorizontally))
             } else {
                 UserDetailViewContent(
-                    userDetailViewModel,
+                    userViewDto = userDetailViewModel.userViewDto,
                     userDetailViewModel::deleteUser,
                     userDetailViewModel::addUser,
                     userDetailViewModel::updateUser,
+                    userDetailViewModel::userCanBeInitialized,
+                    userDetailViewModel::hasId,
+                    userDetailViewModel::toErrorMessage
                 )
             }
         }
@@ -52,41 +56,44 @@ fun UserDetailView(userDetailViewModel: UserDetailViewModel) {
 
 @Composable
 private fun UserDetailViewContent(
-    userDetailViewModel: UserDetailViewModel,
+    userViewDto: UserViewDto,
     deleteUser: () -> Unit,
     addUser: () -> Unit,
     updateUser: () -> Unit,
+    userCanBeInitialized: () -> Boolean,
+    hasId: () -> Boolean,
+    getErrorMessage: () -> String
 ) {
-    if (userDetailViewModel.hasId()) {
-        Text(text = "ID: ${userDetailViewModel.userViewDto.id}")
+    if (hasId()) {
+        Text(text = "ID: ${userViewDto.id}")
     }
     TextField(
         placeholder = { Text(text = "Name eingeben") },
         modifier = Modifier
             .fillMaxWidth(),
-        value = userDetailViewModel.userViewDto.name,
-        onValueChange = { userDetailViewModel.userViewDto.name = it })
+        value = userViewDto.name,
+        onValueChange = { userViewDto.name = it })
     TextField(
         placeholder = { Text(text = "Email eingeben") },
         modifier = Modifier
             .fillMaxWidth(),
-        value = userDetailViewModel.userViewDto.email,
-        onValueChange = { userDetailViewModel.userViewDto.email = it })
+        value = userViewDto.email,
+        onValueChange = { userViewDto.email = it })
     TextField(
         placeholder = { Text(text = "Gender eingeben") },
         modifier = Modifier
             .fillMaxWidth(),
-        value = userDetailViewModel.userViewDto.gender,
-        onValueChange = { userDetailViewModel.userViewDto.gender = it })
+        value = userViewDto.gender,
+        onValueChange = { userViewDto.gender = it })
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = CenterHorizontally
     ) {
-        AnimatedVisibility(visible = userDetailViewModel.userCanBeInitialized()) {
+        AnimatedVisibility(visible = userCanBeInitialized()) {
             Button(
                 onClick = {
-                    if (!userDetailViewModel.hasId()) {
+                    if (!hasId()) {
                         addUser()
                     } else {
                         updateUser()
@@ -97,13 +104,13 @@ private fun UserDetailViewContent(
                 Text(text = stringResource(R.string.save))
             }
         }
-        AnimatedVisibility(visible = userDetailViewModel.hasId()) {
+        AnimatedVisibility(visible = hasId()) {
             Button(onClick = deleteUser) {
                 Text(text = stringResource(R.string.delete))
             }
         }
-        AnimatedVisibility(visible = userDetailViewModel.errorMessage.isNotEmpty()) {
-            Text(text = userDetailViewModel.errorMessage, color = Color.Red)
+        AnimatedVisibility(visible = getErrorMessage().isNotEmpty()) {
+            Text(text = getErrorMessage(), color = Color.Red)
         }
     }
 }

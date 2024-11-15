@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import de.dhbw.mobapp.gorest.dto.UserDto
 import de.dhbw.mobapp.gorest.dto.UserViewDto
 import de.dhbw.mobapp.gorest.service.UserService
 import kotlinx.coroutines.launch
@@ -76,6 +75,10 @@ class UserDetailViewModel : ViewModel() {
 
     fun hasId(): Boolean {
         return userViewDto.id != -1
+    }
+
+    fun toErrorMessage(): String {
+        return errorMessage
     }
 
 }
