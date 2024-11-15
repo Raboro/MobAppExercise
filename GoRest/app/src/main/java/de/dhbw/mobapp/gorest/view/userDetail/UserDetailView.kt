@@ -42,12 +42,12 @@ fun UserDetailView(userDetailViewModel: UserDetailViewModel) {
             } else {
                 UserDetailViewContent(
                     userViewDto = userDetailViewModel.userViewDto,
-                    userDetailViewModel::deleteUser,
-                    userDetailViewModel::addUser,
-                    userDetailViewModel::updateUser,
-                    userDetailViewModel::userCanBeInitialized,
-                    userDetailViewModel::hasId,
-                    userDetailViewModel::toErrorMessage
+                    deleteUser = userDetailViewModel::deleteUser,
+                    addUser = userDetailViewModel::addUser,
+                    updateUser = userDetailViewModel::updateUser,
+                    userCanBeInitialized = userDetailViewModel::userCanBeInitialized,
+                    hasId = userDetailViewModel::hasId,
+                    toErrorMessage = userDetailViewModel::toErrorMessage
                 )
             }
         }
@@ -62,7 +62,7 @@ private fun UserDetailViewContent(
     updateUser: () -> Unit,
     userCanBeInitialized: () -> Boolean,
     hasId: () -> Boolean,
-    getErrorMessage: () -> String
+    toErrorMessage: () -> String
 ) {
     if (hasId()) {
         Text(text = "ID: ${userViewDto.id}")
@@ -109,8 +109,8 @@ private fun UserDetailViewContent(
                 Text(text = stringResource(R.string.delete))
             }
         }
-        AnimatedVisibility(visible = getErrorMessage().isNotEmpty()) {
-            Text(text = getErrorMessage(), color = Color.Red)
+        AnimatedVisibility(visible = toErrorMessage().isNotEmpty()) {
+            Text(text = toErrorMessage(), color = Color.Red)
         }
     }
 }
