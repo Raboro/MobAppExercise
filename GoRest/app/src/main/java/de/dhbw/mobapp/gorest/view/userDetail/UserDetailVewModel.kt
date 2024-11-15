@@ -14,7 +14,7 @@ class UserDetailViewModel : ViewModel() {
     lateinit var navController: NavController
     private val userService = UserService()
 
-    var errorMessage: String by mutableStateOf("")
+    private var errorMessage: String by mutableStateOf("")
     var loading: Boolean by mutableStateOf(false)
     var userViewDto: UserViewDto by mutableStateOf(UserViewDto(-1, "", "", "", "active"))
 
